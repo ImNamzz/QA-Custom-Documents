@@ -10,4 +10,7 @@ def read_pdf(pdf_path):
         texts += "\n"
     return texts
 
+reader = PdfReader(pdf_path)
+print(str(reader.metadata))
+
 print(read_pdf(pdf_path))
