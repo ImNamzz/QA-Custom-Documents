@@ -1,16 +1,25 @@
-from pypdf import PdfReader
+import pymupdf as pf
 
-pdf_path = "E:\QA_Document\CV.pdf"
+pdf_path = "E:\QA_Document\data\CV.pdf"
 
-def read_pdf(pdf_path):
-    reader = PdfReader(pdf_path)
-    texts = ""
-    for page in reader.pages:
-        texts += page.extract_text() or ""
-        texts += "\n"
-    return texts
+def extract_font_size(pdf_path):
 
-reader = PdfReader(pdf_path)
-print(str(reader.metadata))
+    doc = pf.open(pdf_path)
+    print(f"document'{pdf_path}' with {len(doc)} pages")
+    
+    document_data = []
+    for page_num, page in enumerate(doc):
+        print(f"\n ___page {page_num}___ ")
+        blocks = page.get_text("dict")["blocks"]    
+        for block in blocks:
+            if "lines" in block:
+                for line in block["lines"]:
+                    for span in line["spans"]:
+                        text = span["text"]
+                        font_name = span["font"]
+                        font_size = round(span["size"])
+                        print(f"font: {font_name}, size: {font_size}pt | text: '{text.strip()}'")
+    doc.close()
+    return document_data
 
-print(read_pdf(pdf_path))
+extract_font_size(pdf_path)
