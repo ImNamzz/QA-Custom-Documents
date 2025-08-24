@@ -23,3 +23,5 @@ def extract_font_size(pdf_path):
     return document_data
 
 extract_font_size(pdf_path)
+
+# version 1.0
